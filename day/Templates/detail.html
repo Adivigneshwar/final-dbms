@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content%}
+    <div class="container">
+        <a href="#" class="back-link">← Back to Products</a>
+        <div class="product-detail">
+            <div class="image-section">
+                <img src="/api/placeholder/600/400" alt="Medical Product" class="product-image">
+            </div>
+            <div class="product-info">
+                <h1 class="product-title">{{item.title}}</h1>
+                <div class="product-price">{{ item.cate.name |slice:"2:-3"}}
+
+                </div>
+                <p class="product-description">
+                   {{item.content}}
+                </p>
+                <div class="product-specs">
+                    <div class="spec-item">
+                        <span class="spec-label">Material</span>
+                        <span class="spec-value">Medical Grade Silicone</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Size</span>
+                        <span class="spec-value">16 Fr</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Length</span>
+                        <span class="spec-value">40 cm</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Sterility</span>
+                        <span class="spec-value">Sterile</span>
+                    </div>
+                </div>
+                <div class="buy-section">
+                    <div class="quantity">
+                        <button class="quantity-btn">-</button>
+                        <input type="number" value="1" min="1" class="quantity-input">
+                        <button class="quantity-btn">+</button>
+                    </div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}

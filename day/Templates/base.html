@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title | default:"Document"}}</title>
+   
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <link rel="stylesheet" href="{% static 'css/Product.css' %}">
+    <link rel="stylesheet" href="{% static 'css/Product.css' %}">
+    <link rel="stylesheet" href="{% static 'css/detail.css' %}">
+    <link rel="stylesheet" href="{% static 'css/item.css' %}">
+<script>
+    var i =0
+function na(){
+if(i==0){
+    var he=document.querySelector('header')
+    he.style.background="black"
+    var fa = document.querySelectorAll('.fa')
+    fa.forEach( lii => lii.style.color="white")
+    var na = document.querySelector('body')
+    na.style.background="black"
+    na.style.color="white"
+    var cc=document.querySelectorAll('.category-card')
+    cc.forEach(bg => bg.style.background="#313131")
+    var li = document.querySelectorAll('li')
+    li.forEach(item => item.style.color='white')
+    i=1
+}
+else{
+    var he=document.querySelector('header')
+    he.style.background="white"
+    var na = document.querySelector('body')
+    na.style.background="white"
+    na.style.color="black"
+    var cc=document.querySelectorAll('.category-card')
+    cc.forEach(bg => bg.style.background=" #f5f5f5")
+    var li = document.querySelectorAll('li')
+    li.forEach(item => item.style.color='grey')
+    var fa = document.querySelectorAll('a')
+    fa.forEach( lii => lii.style.color="black")
+   i=0
+}
+    
+
+}
+</script>
+</head>
+<body>
+   {% comment %} Header {% endcomment %}
+ {% include 'header.html'%}  
+ {% block content %}
+ {% endblock %}
+ {% include 'footer.html'%} 
+    
+</body>
+</html>

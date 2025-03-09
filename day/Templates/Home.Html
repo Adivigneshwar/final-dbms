@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+    
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Get the best quality medicines for you and your loved ones</h1>
+            <p>Shop by category or search for a specific</p>
+            
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="Search for a medicine, wellness product or health...">
+                <button class="search-button">Search</button>
+            </div>
+        </div>
+        
+        <div class="hero-image">
+            <img src="/api/placeholder/300/200" alt="Person on wheelchair using laptop">
+        </div>
+    </section>
+
+    <section class="categories">
+        <h2>Categories</h2>
+        
+        <div class="category-grid">
+            <div class="category-card">
+                <h3>Prescriptio</h3>
+                <div class="category-icon" style="background-image: url('/api/placeholder/100/100')"></div>
+            </div>
+            
+            <div class="category-card">
+                <h3>Wellness</h3>
+                <div class="category-icon" style="background-image: url('/api/placeholder/100/100')"></div>
+            </div>
+            
+            <div class="category-card">
+                <h3>Health</h3>
+                <div class="category-icon" style="background-image: url('/api/placeholder/100/100')"></div>
+            </div>
+            
+            <div class="category-card">
+                <h3>Trending</h3>
+                <div class="category-icon" style="background-image: url('/api/placeholder/100/100')"></div>
+            </div>
+            
+            <div class="category-card">
+                <h3>Ultricies</h3>
+                <div class="category-icon" style="background-image: url('/api/placeholder/100/100')"></div>
+            </div>
+            
+            <div class="category-card">
+                <h3>Nec b</h3>
+                <div class="category-icon" style="background-image: url('/api/placeholder/100/100')"></div>
+            </div>
+        </div>
+    </section>
+    <div class="container">
+        <h1 class="title">About Us</h1>
+
+        <div class="benefits-section">
+            <div class="content">
+                <h2 class="benefits-heading">All your Medical<br>Disposable Devices needs<br>in one place</h2>
+                <ul class="benefits-list">
+                    <li>Search and find all kind of drugs</li>
+                    <li>We have drugs for special case treatments</li>
+                    <li>Get notified when your drug is available</li>
+                </ul>
+                <a href="#" class="get-prescription">Get prescription</a>
+            </div>
+            <div class="illustration">
+                <img src="Group 373.png" alt="">
+               
+               
+              
+                
+            </div>
+        </div>
+
+        <div class="benefits-section">
+            <div class="content">
+                <h2 class="benefits-heading">Get your essentials on<br>time !</h2>
+                <ul class="benefits-list">
+                    <li>Get straight delivery to your doorstep</li>
+                    <li>We deliver within 24hrs of request</li>
+                    <li>We guarantee speedfly response</li>
+                </ul>
+                <a href="#" class="get-prescription">Get prescription</a>
+            </div>
+            <div class="illustration">
+                <img src="Group 371.png" alt="">
+            </div>
+        </div>
+
+        <div class="benefits-section">
+            <div class="content">
+                <h2 class="benefits-heading">Made by Doctors ,<br>Made for Doctors</h2>
+                <ul class="benefits-list">
+                    <li>When you are a member your refill is easier</li>
+                    <li>With one click your medicine is on it's way</li>
+                    <li>Select a health care specialist</li>
+                </ul>
+                <a href="#" class="get-prescription">Get prescription</a>
+            </div>
+            <div class="illustration">
+                <img src="Group 372.png" alt="Delivery illustration">
+            </div>
+        </div>
+    </div>
+{% endblock%}

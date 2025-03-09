@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="container">
+        <h1 class="heading">Medical Products</h1>
+        <div class="view-all">
+            <a href="#">View All →</a>
+        </div>
+        <div class="product-grid">
+            {%if item%}
+            {%for post in item%}
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="{{ post.img_url }}">
+
+                </div>
+                <div class="product-name">{{post.title}}</div>
+                <div class="product-price">{{ post.content | truncatewords:2 }}</div>
+
+                <a href="/details/product/{{post.id}}/">
+                    <button class="add-to-cart">Add to Cart</button></a>
+            </div>
+            {% endfor %}
+            {% else %}
+            <p>No Match Found</p>
+           {% endif %}
+           
+           
+        </div>
+        
+    </div>
+{% endblock%}
