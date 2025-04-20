@@ -14,7 +14,7 @@ class Command(BaseCommand):
             "Medical Devices & Equipment",
             "Personal Protection & Hygiene",
             "Diabetes & Health Monitoring",
-            "Mother & Baby Care"
+            
 ]
            
             for cate_name in zip(categories):

@@ -1,46 +1,247 @@
 {% extends "base.html" %}
+{% load static %}
+
 {% block content%}
+{% comment %} <style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    }
+    
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    
+    .product-detail {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        margin-top: 40px;
+        animation: fadeIn 0.6s ease-out;
+    }
+    
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .product-image {
+        width: 100%;
+        height: 400px;
+        object-fit: contain;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        background: white;
+        padding: 20px;
+        transition: transform 0.3s ease;
+    }
+    
+    .product-image:hover {
+        transform: scale(1.02);
+    }
+    
+    .product-info {
+        padding: 20px;
+    }
+    
+    .product-title {
+        font-size: 2.5rem;
+        color: #333;
+        margin-bottom: 1rem;
+    }
+    
+    .product-price {
+        font-size: 2rem;
+        color: #4285f4;
+        margin-bottom: 1.5rem;
+        font-weight: bold;
+    }
+    
+    .product-description {
+        font-size: 1.1rem;
+        line-height: 1.6;
+        color: #666;
+        margin-bottom: 2rem;
+    }
+    
+    .product-specs {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+    }
+    
+    .spec-item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .spec-label {
+        font-weight: 500;
+        color: #333;
+    }
+    
+    .spec-value {
+        color: #666;
+    }
+    
+    .buy-section {
+        display: flex;
+        gap: 20px;
+        align-items: center;
+    }
+    
+    .quantity {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .quantity-btn {
+        background: #f0f0f0;
+        border: none;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 1.2rem;
+        transition: background 0.3s ease;
+    }
+    
+    .quantity-btn:hover {
+        background: #e0e0e0;
+    }
+    
+    .quantity-input {
+        width: 60px;
+        height: 36px;
+        text-align: center;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        font-size: 1rem;
+    }
+    
+    .add-to-cart {
+        background-color: #4285f4;
+        color: white;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+    }
+    
+    .add-to-cart:hover {
+        background-color: #3367d6;
+        transform: translateY(-2px);
+    }
+    
+    .back-link {
+        display: inline-block;
+        color: #4285f4;
+        text-decoration: none;
+        margin-bottom: 20px;
+        font-size: 1.1rem;
+        transition: color 0.3s ease;
+    }
+    
+    .back-link:hover {
+        color: #3367d6;
+    }
+    
+    @media (max-width: 768px) {
+        .product-detail {
+            grid-template-columns: 1fr;
+        }
+    
+        .product-image {
+            height: 300px;
+        }
+    }
+    
+</style> {% endcomment %}
     <div class="container">
+        {% csrf_token %}
         <a href="#" class="back-link">← Back to Products</a>
         <div class="product-detail">
             <div class="image-section">
                 <img src="/api/placeholder/600/400" alt="Medical Product" class="product-image">
             </div>
             <div class="product-info">
-                <h1 class="product-title">{{item.title}}</h1>
-                <div class="product-price">{{ item.cate.name |slice:"2:-3"}}
-
+                <h1 class="product-title">{{posts.title}}</h1>
+                <div class="product-price">{{ item.name }}
                 </div>
-                <p class="product-description">
-                   {{item.content}}
+                <p class="product-description" id="con">
+                  <b> {{item.content}}</b>
                 </p>
                 <div class="product-specs">
                     <div class="spec-item">
-                        <span class="spec-label">Material</span>
-                        <span class="spec-value">Medical Grade Silicone</span>
+                        <span class="spec-label">Category</span>
+                        <span class="spec-value">{{ item.cate.name |slice:"2:-3"}}</span>
                     </div>
                     <div class="spec-item">
-                        <span class="spec-label">Size</span>
-                        <span class="spec-value">16 Fr</span>
+                        <span class="spec-label">Amount</span>
+                        <span class="spec-value">{{item.content}}</span>
                     </div>
-                    <div class="spec-item">
+                    {% comment %} <div class="spec-item">
                         <span class="spec-label">Length</span>
                         <span class="spec-value">40 cm</span>
                     </div>
                     <div class="spec-item">
                         <span class="spec-label">Sterility</span>
                         <span class="spec-value">Sterile</span>
-                    </div>
-                </div>
+                    </div> {% endcomment %}
+                </div><br><br><br>
+                <h3>prd id:{{item.id}}</h3>
+                
                 <div class="buy-section">
                     <div class="quantity">
                         <button class="quantity-btn">-</button>
-                        <input type="number" value="1" min="1" class="quantity-input">
+                        <input type="number" value="1" min="1" class="quantity-input" id="val">
                         <button class="quantity-btn">+</button>
                     </div>
-                    <button class="add-to-cart">Add to Cart</button>
+                    <button class="add-to-cart" value={{item.id}} id="add-cart">Add to Cart</button>
                 </div>
             </div>
         </div>
     </div>
-    {% endblock %}
+    <script src="{% static  'css/js/js.js' %}"></script>
+    <script>
+        // Check if Add to Cart button is clicked
+        $(document).on('click', '#add-cart', function(e) {
+            e.preventDefault();
+    
+            $.ajax({
+                type: 'POST',
+                url: '{% url "cart_add" %}',  // URL to your view
+                data: {
+                    product_id: $('#add-cart').val(),  // Assuming the button has product ID as its value
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    action: 'post'
+                },
+                success: function(response) {
+                    console.log("Cart updated:", response);
+                },
+                error: function(xhr, errmsg, err) {
+                    console.log("Error:", errmsg);
+                }
+            });
+        });
+        console.log("{{item.id}}")
+    </script>
+    
+{% endblock %}

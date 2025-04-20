@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="container">
+        <h1 class="heading">Medical Products</h1>
+        <div class="view-all">
+            <a href="#">View All →</a>
+        </div>
+        <div class="product-grid">
+            {% if item %}
+           
+                {% for post in item %}
+                   
+
+                    {% if post.cate_id|add:0 == 6 %}
+                        <div class="product-card">
+                            <div class="product-image">
+                                <img src="{{ post.img_url }}">
+                            </div>
+                            <div class="product-name">{{ post.title }}</div>
+                            <div class="product-price">{{ post.content }}</div>
+                            <style>
+                                .view-btn {
+                                    display: inline-block;
+                                    background-color: #3B82F6;
+                                    color: white;
+                                    padding: 10px 20px;
+                                    text-align: center;
+                                    text-decoration: none;
+                                    border-radius: 6px;
+                                    font-weight: 500;
+                                    font-size: 14px;
+                                    transition: background-color 0.3s ease;
+                                }
+                                
+                                .view-btn:hover {
+                                    background-color: #2563EB; /* Darker blue on hover */
+                                }
+                                </style>
+                                
+                                <a href="/details/product/{{ post.id }}/" class="view-btn">View Details</a>
+                          
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <p>No Match Found</p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

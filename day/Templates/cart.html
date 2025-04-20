@@ -1,0 +1,12 @@
+<h3>Your Cart Items</h3>
+{% if cart %}
+  <ul id="cart-items-list">
+    {% for item in cart %}
+      <li>
+        <strong>{{ item.product.name }}</strong> — ₹{{ item.product.price }} × {{ item.quantity }}
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>No items in cart.</p>
+{% endif %}
