@@ -1,214 +1,337 @@
 {% extends "base.html" %}
+{% load static %}
+
 {% block content %}
 <style>
     /* Container and layout */
-    .container-fluid {
-      padding: 20px;
-      max-width: 1400px;
-      margin: 0 auto;
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
     }
     
-    .row {
-      margin-bottom: 20px;
+    .product-detail {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        margin-top: 40px;
+        animation: fadeIn 0.6s ease-out;
     }
     
-    .col-6, .col-4 {
-      padding: 10px;
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
     
-    /* Typography */
-    h2, h3, h5 {
-      color: #333;
-      margin-bottom: 15px;
+    /* Product image */
+    .image-section {
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
     
-    /* Lists */
-    ul {
-      list-style-type: none;
-      padding-left: 0;
-    }
-    
-    li {
-      padding: 5px 0;
-      color: #555;
-    }
-    
-    /* Cards */
-    .card {
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      height: 100%;
-    }
-    
-    .card-body {
-      padding: 20px;
-    }
-    
-    .card-title {
-      font-weight: bold;
-      font-size: 18px;
-    }
-    
-    .card-text {
-      color: #666;
-      margin-bottom: 15px;
-    }
-    
-    /* Images */
-    .img-fluid {
-      border-radius: 4px;
-      max-width: 100%;
-      height: auto;
-    }
-    
-    /* Buttons */
-    .btn {
-      padding: 8px 16px;
-      border-radius: 4px;
-      font-weight: 500;
-      text-decoration: none;
-      display: inline-block;
-    }
-    
-    .btn-success {
-      background-color: #28a745;
-      color: white;
-    }
-    
-    .btn-info {
-      background-color: #17a2b8;
-      color: white;
-    }
-    
-    .btn-danger {
-      background-color: #dc3545;
-      color: white;
-    }
-    
-    .btn-sm {
-      padding: 5px 10px;
-      font-size: 14px;
-    }
-    
-    /* Text utilities */
-    .text-decoration-none {
-      text-decoration: none;
-    }
-    
-    .text-dark {
-      color: #343a40;
-    }
-    
-    .text-light {
-      color: white;
-    }
-    
-    .text-danger {
-      color: #dc3545;
-    }
-    
-    .fw-bold {
-      font-weight: bold;
-    }
-    
-    /* Spacing utilities */
-    .mt-3 {
-      margin-top: 1rem;
-    }
-    
-    .mb-4 {
-      margin-bottom: 1.5rem;
-    }
-    
-    .m-3 {
-      margin: 1rem;
-    }
-    
-    /* Flex utilities */
-    .d-flex {
-      display: flex;
-    }
-    
-    .justify-content-center {
-      justify-content: center;
-    }
-    
-    .justify-content-between {
-      justify-content: space-between;
-    }
-    
-    .justify-content-end {
-      justify-content: flex-end;
-    }
-    
-    /* Media queries for responsiveness */
-    @media (max-width: 768px) {
-      .col-md-4, .col-md-8 {
+    .product-image {
         width: 100%;
-      }
-      
-      .d-flex.justify-content-between {
-        flex-direction: column;
-        gap: 10px;
-      }
+        height: 400px;
+        object-fit: contain;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        background: white;
+        padding: 20px;
+        transition: transform 0.3s ease;
     }
-  </style>
-<div class="container-fluid ">
     
-        <div class="row">
-          <div class="col-6">
-              <h3> Hi, [USERNAME].</h3>
-          </div>
-          <div class="col d-flex justify-content-end">
-              <div>
-                  <h2>Your Groups:</h2>
-                  <ul>
-                      <li> {{ request.user.username }}</li>
-                      <li>You are not a member of any groups.</li>
-                  </ul>
-              </div>
-          </div>
+    .product-image:hover {
+        transform: scale(1.02);
+    }
+    
+    /* Product information */
+    .product-info {
+        padding: 20px;
+    }
+    
+    .product-title {
+        font-size: 2.2rem;
+        color: #333;
+        margin-bottom: 1rem;
+        font-weight: 700;
+    }
+    
+    .product-price {
+        font-size: 1.8rem;
+        color: #4285f4;
+        margin-bottom: 1.5rem;
+        font-weight: bold;
+    }
+    
+    .product-description {
+        font-size: 1.1rem;
+        line-height: 1.6;
+        color: #555;
+        margin-bottom: 2rem;
+    }
+    
+    /* Product specifications */
+    .product-specs {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+    
+    .spec-item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .spec-item:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+        margin-bottom: 0;
+    }
+    
+    .spec-label {
+        font-weight: 600;
+        color: #333;
+    }
+    
+    .spec-value {
+        color: #666;
+    }
+    
+    /* Buy section */
+    .buy-section {
+        display: flex;
+        gap: 20px;
+        align-items: center;
+        margin-top: 1.5rem;
+    }
+    
+    .quantity {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .quantity-btn {
+        background: #f0f0f0;
+        border: none;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 1.2rem;
+        transition: background 0.3s ease;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .quantity-btn:hover {
+        background: #e0e0e0;
+    }
+    
+    .quantity-input {
+        width: 60px;
+        height: 36px;
+        text-align: center;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        font-size: 1rem;
+    }
+    
+    .add-to-cart {
+        background-color: #4285f4;
+        color: white;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        font-weight: 500;
+    }
+    
+    .add-to-cart:hover {
+        background-color: #3367d6;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    
+    /* Back link */
+    .back-link {
+        display: inline-block;
+        color: #4285f4;
+        text-decoration: none;
+        margin-bottom: 20px;
+        font-size: 1.1rem;
+        transition: color 0.3s ease;
+        font-weight: 500;
+    }
+    
+    .back-link:hover {
+        color: #3367d6;
+    }
+    
+    /* Cart message */
+    #cart-message {
+        margin-top: 20px;
+        transition: all 0.3s ease;
+    }
+    
+    .success-message {
+        color: #2e7d32;
+        padding: 15px;
+        background-color: #e8f5e9;
+        border-radius: 6px;
+        border-left: 4px solid #2e7d32;
+        animation: slideIn 0.5s ease-out;
+    }
+    
+    .error-message {
+        color: #c62828;
+        padding: 15px;
+        background-color: #ffebee;
+        border-radius: 6px;
+        border-left: 4px solid #c62828;
+        animation: slideIn 0.5s ease-out;
+    }
+    
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    /* Responsive styles */
+    @media (max-width: 768px) {
+        .product-detail {
+            grid-template-columns: 1fr;
+        }
+    
+        .product-image {
+            height: 300px;
+        }
+        
+        .buy-section {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        
+        .quantity {
+            margin-bottom: 15px;
+        }
+    }
+</style>
+
+<div class="container">
+    {% csrf_token %}
+    <a href="{% url 'product' %}" class="back-link">← Back to Products</a>
+    <div class="product-detail">
+        <div class="image-section">
+            <img src="{% static item.img_url %}" alt="{{item.title}}" class="product-image">
         </div>
-        <div class="row d-flex justify-content-center">
-          <div class="col-6">
-              [ERRORS]
-          </div>
-        </div>
-        <div class="row">
-          <h2 class="mt-3">{{blog_title}}</h2>
-          <div class="d-flex justify-content-center">
-              <a href="/newpost" class="btn btn-success">New Post</a>
-          </div>
-        </div>
-        <div class="row m-3">
-            <div class="col-4 mb-4">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <img style="height:300; width:300;" src="https://placehold.co/600x400" class="img-fluid" alt="...">
-                            </div>
-                            <div class="col-md-8">
-                                <h5 class="card-title">[POST TITLE]</h5>
-                                <p class="card-text">[POST CONTENT]</p>
-                                <div class="d-flex justify-content-between">
-                                    <a href="[POST DETAIL URL]">Read More</a>
-                                    <a class="text-decoration-none text-dark fw-bold" href="#">[CATEGORY NAME]</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="d-flex justify-content-between mt-3">
-                          <a class="btn btn-info btn-sm text-light" href="[EDIT POST URL]">Edit Post</a>
-                          <a class="btn btn-danger btn-sm text-light" href="[DELETE POST URL]">Delete Post</a>
-                          <a class="btn btn-success btn-sm text-light" href="[PUBLISH POST URL]">Publish Post</a>
-                          <label class="text-danger">Not Published</label>
-                        </div>
-                    </div>
+        <div class="product-info">
+            <h1 class="product-title">{{item.title}}</h1>
+            <div class="product-price">${{ item.price }}</div>
+            <p class="product-description" id="con">
+              <b>{{item.content}}</b>
+            </p>
+            <div class="product-specs">
+                <div class="spec-item">
+                    <span class="spec-label">Category</span>
+                    <span class="spec-value">{{ item.cate.name |slice:"2:-3"}}</span>
+                </div>
+                <div class="spec-item">
+                    <span class="spec-label">Amount</span>
+                    <span class="spec-value">{{item.content}}</span>
                 </div>
             </div>
-
+            <h3>Product ID: {{item.id}}</h3>
+            
+            <div class="buy-section">
+                <div class="quantity">
+                    <button class="quantity-btn minus-btn">-</button>
+                    <input type="number" value="1" min="1" class="quantity-input" id="quantity-val">
+                    <button class="quantity-btn plus-btn">+</button>
+                </div>
+                <button class="add-to-cart" data-product-id="{{item.id}}" id="add-cart">Add to Cart</button>
+            </div>
+            <!-- Cart message container -->
+            <div id="cart-message" style="display: none;"></div>
         </div>
+    </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    // Quantity buttons functionality
+    $(document).ready(function() {
+        // Plus button click
+        $('.plus-btn').click(function() {
+            var currentVal = parseInt($('#quantity-val').val());
+            $('#quantity-val').val(currentVal + 1);
+        });
+        
+        // Minus button click
+        $('.minus-btn').click(function() {
+            var currentVal = parseInt($('#quantity-val').val());
+            if (currentVal > 1) {
+                $('#quantity-val').val(currentVal - 1);
+            }
+        });
+        
+        // Add to cart button click
+        $('#add-cart').click(function(e) {
+            e.preventDefault();
+            
+            var productId = $(this).data('product-id');
+            var quantity = $('#quantity-val').val();
+            
+            $.ajax({
+                type: 'POST',
+                url: '{% url "cart_add" %}',
+                data: {
+                    product_id: productId,
+                    quantity: quantity,
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    action: 'post'
+                },
+                success: function(response) {
+                    console.log("Cart updated:", response);
+                    
+                    // Show success message
+                    $('#cart-message').html('<div class="success-message">Product "' + response.product_name + '" added to cart successfully!</div>');
+                    $('#cart-message').show();
+                    
+                    // Hide message after 3 seconds
+                    setTimeout(function() {
+                        $('#cart-message').fadeOut('slow');
+                    }, 3000);
+                },
+                error: function(xhr, errmsg, err) {
+                    console.log("Error:", errmsg);
+                    
+                    // Show error message
+                    $('#cart-message').html('<div class="error-message">Failed to add item to cart. Please try again.</div>');
+                    $('#cart-message').show();
+                }
+            });
+        });
+    });
+</script>
 {% endblock %}
-      
-   

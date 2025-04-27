@@ -98,3 +98,23 @@ def cart_add(request):
         # Return response
         response = JsonResponse({'Product Name: ': product.name})
         return response
+def one(request):
+    posts = Post.objects.all()
+    return render(request, "1.html", {'item': posts})  # Pass the posts as 'item'
+def two(request):
+    posts = Post.objects.all()
+    return render(request,"2.html")
+def three(request):
+    posts = Post.objects.all()
+    return render(request,"3.html")
+def four(request):
+    posts = Post.objects.all()
+    return render(request,"4.html")
+def five(request):
+    posts = Post.objects.all()
+    return render(request,"5.html")
+def six(request):
+    posts = Post.objects.all()
+    return render(request,"6.html")
+def map(request):
+    return render(request,"map.html")

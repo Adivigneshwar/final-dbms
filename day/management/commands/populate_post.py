@@ -1,7 +1,7 @@
 from typing import Any
 from day.models import Post, Cate
 from django.core.management import BaseCommand
-import random 
+import random
 
 class Command(BaseCommand):
     help = "Populate or update posts"
@@ -19,56 +19,51 @@ class Command(BaseCommand):
             "Digital Weighing Scale", "Medical Scissors"
         ]
         
+        # Just use numeric values without the "Rs" prefix
         prices = [
-            "Rs 200", "Rs 800", "Rs 600", "Rs 1200",
-            "Rs 150", "Rs 500", "Rs 300", "Rs 2000",
-            "Rs 100", "Rs 750", "Rs 400", "Rs 250",
-            "Rs 1500", "Rs 1000", "Rs 1800", "Rs 2500",
-            "Rs 50", "Rs 2200", "Rs 100", "Rs 80",
-            "Rs 200", "Rs 300", "Rs 150", "Rs 120",
-            "Rs 180", "Rs 350", "Rs 200", "Rs 250",
-            "Rs 700", "Rs 500"
+            200, 800, 600, 1200,
+            150, 500, 300, 2000,
+            100, 750, 400, 250,
+            1500, 1000, 1800, 2500,
+            50, 2200, 100, 80,
+            200, 300, 150, 120,
+            180, 350, 200, 250,
+            700, 500
         ]
         
+        # Use your local image files from the img directory
         img_urls = [
-            "https://picsum.photos/id/12/200/300",
-            "https://picsum.photos/id/13/200/300",
-            "https://picsum.photos/id/14/200/300",
-            "https://picsum.photos/id/15/200/300",
-            "https://picsum.photos/id/16/200/300",
-            "https://picsum.photos/id/17/200/300",
-            "https://picsum.photos/id/18/200/300",
-            "https://picsum.photos/id/9/200/300",
-            "https://picsum.photos/id/10/200/300",
-            "https://picsum.photos/id/11/200/300", 
-            "https://picsum.photos/id/12/200/300",
-            "https://picsum.photos/id/13/200/300",
-            "https://picsum.photos/id/14/200/300",
-            "https://picsum.photos/id/15/200/300",
-            "https://picsum.photos/id/16/200/300",
-            "https://picsum.photos/id/17/200/300",
-            "https://picsum.photos/id/18/200/300",
-            "https://picsum.photos/id/9/200/300",
-            "https://picsum.photos/id/10/200/300",
-            "https://picsum.photos/id/11/200/300",
+            "img/para.png", "img/insulin.jpg", "img/antoseptic.jpg", "img/syrup.jpg", "img/bandage.jpg", 
+            "img/vitamin.jpg", "img/pain.jpg", "img/bp.jpg", "img/hand.jpg", 
+            "img/digital.jpg", "img/antobiotic.jpg", "img/cold.jpg", "img/nebulizer.jpg", 
+            "img/first.jpg", "img/Glucometer.jpg", "img/stethoscope.jpg", "img/mask.jpg","img/pulse.jpg", 
+            "img/cough.jpg", "img/oral.jpg", "img/Hand Gloves.jpg", "img/Antacid Tablets.jpg","img/Hot Water Bag.jpg", 
+            "img/Ear Drops.jpg", "img/Eye Drops.jpg", "img/Wound Dressing.jpg", "img/Face Shield.jpg","img/Sanitizing Wipes.jpg", 
+            "img/Digital Weighing Scale.jpg", "img/Medical Scissors.jpg"
         ]
-
+        
+        # If you have more products than images, cycle through the images
+        local_images = []
+        for i in range(len(titles)):
+            img_index = i % len(img_urls)
+            local_images.append(img_urls[img_index])
+        
         categories = Cate.objects.all()
-
-        for title, price, img_url in zip(titles, prices, img_urls):
+        
+        for title, price, img_path in zip(titles, prices, local_images):
             category = random.choice(categories)
-
+            
             # Ensure only one entry per title
             Post.objects.filter(title=title).delete()
             
-            # Create a new post
+            # Create a new post with local image path
             Post.objects.create(
                 title=title,
-                price=price,
-                img_url=img_url,
+                price=price,  # Now using numeric values
+                img_url=img_path,
                 cate=category
             )
-
-            self.stdout.write(self.style.SUCCESS(f"Updated post: {title}"))
-
+            
+            self.stdout.write(self.style.SUCCESS(f"Updated post: {title} with image: {img_path}"))
+        
         self.stdout.write(self.style.SUCCESS("Completed inserting/updating Data!"))

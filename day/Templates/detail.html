@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block content%}
-{% comment %} <style>
+<style>
     * {
         box-sizing: border-box;
         margin: 0;
@@ -10,6 +10,7 @@
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
     }
     
+    /* All CSS styles remain the same */
     .container {
         max-width: 1200px;
         margin: 0 auto;
@@ -102,6 +103,7 @@
         display: flex;
         gap: 20px;
         align-items: center;
+        margin-top: 20px;
     }
     
     .quantity {
@@ -118,6 +120,9 @@
         border-radius: 50%;
         cursor: pointer;
         font-size: 1.2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         transition: background 0.3s ease;
     }
     
@@ -163,6 +168,350 @@
         color: #3367d6;
     }
     
+    .cost-details {
+        margin-top: 20px;
+        padding: 0;
+        border-radius: 8px;
+        overflow: hidden;
+        border-left: 4px solid #4285f4;
+        background-color: #f8f9fa;
+    }
+    
+    .cost-detail-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 15px 20px;
+        font-size: 16px;
+        color: #333;
+        border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .cost-detail-row:last-child {
+        border-bottom: none;
+    }
+    
+    .cost-total {
+        display: flex;
+        justify-content: space-between;
+        padding: 15px 20px;
+        background-color: #f0f4f8;
+        font-weight: bold;
+        font-size: 1.1rem;
+        color: #333;
+    }
+    
+    .price-value {
+        font-weight: 600;
+        text-align: right;
+    }
+    
+    .product-id {
+        margin: 15px 0;
+        font-size: 1rem;
+        color: #555;
+    }
+    
+    /* Floating Cart Popup Styles */
+    .cart-popup {
+        position: fixed;
+        top: 30px;
+        right: 30px;
+        width: 350px;
+        background-color: white;
+        border-radius: 12px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        z-index: 1000;
+        opacity: 0;
+        transform: translateY(-20px);
+        pointer-events: none;
+        transition: all 0.3s ease;
+        max-height: 80vh;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .cart-popup.visible {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: all;
+    }
+    
+    .cart-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 20px;
+        border-bottom: 1px solid #f0f0f0;
+        background-color: #4285f4;
+        color: white;
+        border-radius: 12px 12px 0 0;
+    }
+    
+    .cart-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+    }
+    
+    .close-cart {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 1.4rem;
+        cursor: pointer;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: background 0.2s ease;
+    }
+    
+    .close-cart:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+    }
+    
+    .cart-items {
+        padding: 15px;
+        overflow-y: auto;
+        max-height: 60vh;
+    }
+    
+    .cart-empty {
+        text-align: center;
+        padding: 30px 0;
+        color: #777;
+    }
+    
+    .cart-item {
+        display: flex;
+        padding: 10px 0;
+        border-bottom: 1px solid #f0f0f0;
+        animation: slideIn 0.3s ease-out;
+    }
+    
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateX(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+    
+    .cart-item-image {
+        width: 60px;
+        height: 60px;
+        object-fit: contain;
+        background: #f8f9fa;
+        border-radius: 6px;
+    }
+    
+    .cart-item-details {
+        flex-grow: 1;
+        padding: 0 15px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    
+    .cart-item-title {
+        font-weight: 500;
+        color: #333;
+        font-size: 0.95rem;
+    }
+    
+    .cart-item-price {
+        color: #4285f4;
+        font-weight: 600;
+        font-size: 0.95rem;
+    }
+    
+    .cart-item-quantity {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 5px;
+    }
+    
+    .cart-qty-btn {
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f0f0f0;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 1rem;
+    }
+    
+    .cart-qty-value {
+        font-size: 0.9rem;
+        width: 30px;
+        text-align: center;
+    }
+    
+    .remove-item {
+        color: #ff3b30;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 5px;
+        font-size: 1.2rem;
+        transition: transform 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .remove-item:hover {
+        transform: scale(1.1);
+    }
+    
+    .cart-footer {
+        padding: 15px 20px;
+        border-top: 1px solid #f0f0f0;
+        background-color: #f8f9fa;
+        border-radius: 0 0 12px 12px;
+    }
+    
+    .cart-total {
+        display: flex;
+        justify-content: space-between;
+        font-weight: 600;
+        font-size: 1.1rem;
+        margin-bottom: 15px;
+    }
+    
+    .checkout-btn {
+        width: 100%;
+        padding: 12px;
+        background-color: #4285f4;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+    
+    .checkout-btn:hover {
+        background-color: #3367d6;
+    }
+    
+    .cart-badge {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background-color: #4285f4;
+        color: white;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.8rem;
+        font-weight: bold;
+        cursor: pointer;
+        z-index: 999;
+        transition: transform 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    
+    .cart-badge:hover {
+        transform: scale(1.1);
+    }
+    
+    .cart-item-container {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .cart-product-info {
+        flex: 1;
+    }
+    
+    /* Payment Modal Styles */
+    .payment-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2000;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+    }
+    
+    .payment-modal.visible {
+        opacity: 1;
+        pointer-events: auto;
+    }
+    
+    .payment-content {
+        background-color: white;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        max-width: 400px;
+        width: 90%;
+        text-align: center;
+        animation: zoomIn 0.3s ease-out;
+    }
+    
+    @keyframes zoomIn {
+        from {
+            opacity: 0;
+            transform: scale(0.9);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+    
+    .payment-title {
+        font-size: 1.5rem;
+        color: #333;
+        margin-bottom: 15px;
+    }
+    
+    .payment-message {
+        color: #666;
+        margin-bottom: 20px;
+        line-height: 1.5;
+    }
+    
+    .payment-close {
+        background-color: #4285f4;
+        color: white;
+        border: none;
+        padding: 10px 25px;
+        border-radius: 6px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+    
+    .payment-close:hover {
+        background-color: #3367d6;
+    }
+    
     @media (max-width: 768px) {
         .product-detail {
             grid-template-columns: 1fr;
@@ -171,77 +520,353 @@
         .product-image {
             height: 300px;
         }
+        
+        .cart-popup {
+            width: 90%;
+            right: 5%;
+            left: 5%;
+        }
     }
+</style>
+</head>
+<body>
+<div class="container">
+    <!-- Cart Badge -->
+    <div class="cart-badge" id="cart-badge">0</div>
     
-</style> {% endcomment %}
-    <div class="container">
-        {% csrf_token %}
-        <a href="#" class="back-link">← Back to Products</a>
-        <div class="product-detail">
-            <div class="image-section">
-                <img src="/api/placeholder/600/400" alt="Medical Product" class="product-image">
+    <!-- Floating Cart Popup -->
+    <div class="cart-popup" id="cart-popup">
+        <div class="cart-header">
+            <div class="cart-title">Your Cart</div>
+            <button class="close-cart" id="close-cart">×</button>
+        </div>
+        <div class="cart-items" id="cart-items">
+            <div class="cart-empty" id="cart-empty">Your cart is empty</div>
+            <!-- Cart items will be populated by JavaScript -->
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total:</span>
+                <span id="cart-total-price">RS0.00</span>
             </div>
-            <div class="product-info">
-                <h1 class="product-title">{{posts.title}}</h1>
-                <div class="product-price">{{ item.name }}
+            <button class="checkout-btn" id="checkout-btn">Proceed to Checkout</button>
+        </div>
+    </div>
+    
+    <!-- Payment Not Configured Modal -->
+    <div class="payment-modal" id="payment-modal">
+        <div class="payment-content">
+            <h2 class="payment-title">Payment Not Configured</h2>
+            <p class="payment-message">
+                Sorry, the payment system is not configured yet. Please try again later.
+            </p>
+            <button class="payment-close" id="payment-close">Close</button>
+        </div>
+    </div>
+    
+    <!-- Back Link -->
+    <a href="#" class="back-link">← Back to Products</a>
+    
+    <!-- Product Detail Section -->
+    <div class="product-detail">
+        <div class="image-section">
+            <img src="{% static item.img_url %}" alt="Product Image" class="product-image" id="product-image">
+        </div>
+        <div class="product-info">
+            <h1 class="product-title">{{item.title}}</h1>
+            <div class="product-price">{{item.content}}</div>
+           
+          
+            <div class="cost-details">
+                <div class="cost-detail-row">
+                    <span>Unit Price:</span>
+                    <span class="price-value" id="unit-price">{{item.price}}</span>
                 </div>
-                <p class="product-description" id="con">
-                  <b> {{item.content}}</b>
-                </p>
+                <div class="cost-detail-row">
+                    <span>Quantity:</span>
+                    <span class="price-value" id="quantity-display">1</span>
+                </div>
                 <div class="product-specs">
                     <div class="spec-item">
-                        <span class="spec-label">Category</span>
+                        <span class="spec-label">Category:</span>
                         <span class="spec-value">{{ item.cate.name |slice:"2:-3"}}</span>
                     </div>
-                    <div class="spec-item">
-                        <span class="spec-label">Amount</span>
-                        <span class="spec-value">{{item.content}}</span>
-                    </div>
-                    {% comment %} <div class="spec-item">
-                        <span class="spec-label">Length</span>
-                        <span class="spec-value">40 cm</span>
-                    </div>
-                    <div class="spec-item">
-                        <span class="spec-label">Sterility</span>
-                        <span class="spec-value">Sterile</span>
-                    </div> {% endcomment %}
-                </div><br><br><br>
-                <h3>prd id:{{item.id}}</h3>
-                
-                <div class="buy-section">
-                    <div class="quantity">
-                        <button class="quantity-btn">-</button>
-                        <input type="number" value="1" min="1" class="quantity-input" id="val">
-                        <button class="quantity-btn">+</button>
-                    </div>
-                    <button class="add-to-cart" value={{item.id}} id="add-cart">Add to Cart</button>
                 </div>
+                <div class="cost-total">
+                    <span>Total:</span>
+                    <span class="price-value" id="total-price">{{item.price}}</span>
+                </div>
+            </div>
+            
+            <div class="product-id">
+                <h3>prd id:{{item.id}}</h3>
+            </div>
+            
+            <div class="buy-section">
+                <div class="quantity">
+                    <button class="quantity-btn" id="decrease-qty">-</button>
+                    <input type="number" value="1" min="1" class="quantity-input" id="qty-input">
+                    <button class="quantity-btn" id="increase-qty">+</button>
+                </div>
+                <button class="add-to-cart" value="{{item.id}}" id="add-cart">Add to Cart</button>
             </div>
         </div>
     </div>
-    <script src="{% static  'css/js/js.js' %}"></script>
-    <script>
-        // Check if Add to Cart button is clicked
-        $(document).on('click', '#add-cart', function(e) {
-            e.preventDefault();
-    
-            $.ajax({
-                type: 'POST',
-                url: '{% url "cart_add" %}',  // URL to your view
-                data: {
-                    product_id: $('#add-cart').val(),  // Assuming the button has product ID as its value
-                    csrfmiddlewaretoken: '{{ csrf_token }}',
-                    action: 'post'
-                },
-                success: function(response) {
-                    console.log("Cart updated:", response);
-                },
-                error: function(xhr, errmsg, err) {
-                    console.log("Error:", errmsg);
+</div>
+<br> <br> <br> <br>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Elements
+        const decreaseBtn = document.getElementById('decrease-qty');
+        const increaseBtn = document.getElementById('increase-qty');
+        const qtyInput = document.getElementById('qty-input');
+        const quantityDisplay = document.getElementById('quantity-display');
+        const totalPrice = document.getElementById('total-price');
+        const addToCartBtn = document.getElementById('add-cart');
+        const cartPopup = document.getElementById('cart-popup');
+        const closeCartBtn = document.getElementById('close-cart');
+        const cartBadge = document.getElementById('cart-badge');
+        const cartItems = document.getElementById('cart-items');
+        const cartEmptyMsg = document.getElementById('cart-empty');
+        const cartTotalPrice = document.getElementById('cart-total-price');
+        const productImg = document.getElementById('product-image');
+        const checkoutBtn = document.getElementById('checkout-btn');
+        const paymentModal = document.getElementById('payment-modal');
+        const paymentCloseBtn = document.getElementById('payment-close');
+        
+        // Current product data
+        const product = {
+            id: "{{ item.id }}",
+            title: "{{ item.title }}",
+            price: {{ item.price }},
+            imgUrl: "{{ item.img_url }}"
+        };
+        
+        // Cart state - Load from localStorage if available
+        let cart = [];
+        let cartTotal = 0;
+        
+        // Load cart from localStorage if available
+        function loadCart() {
+            const savedCart = localStorage.getItem('shoppingCart');
+            if (savedCart) {
+                try {
+                    cart = JSON.parse(savedCart);
+                } catch (e) {
+                    console.error('Error parsing cart from localStorage:', e);
+                    cart = [];
                 }
-            });
+            }
+        }
+        
+        // Save cart to localStorage
+        function saveCart() {
+            localStorage.setItem('shoppingCart', JSON.stringify(cart));
+        }
+        
+        // Function to update the displayed cost on product page
+        function updateCost() {
+            const quantity = parseInt(qtyInput.value);
+            const total = (quantity * product.price).toFixed(2);
+            
+            // Update quantity display
+            quantityDisplay.textContent = quantity;
+            
+            // Update total price
+            totalPrice.textContent = 'RS' + total;
+        }
+        
+        // Decrease quantity
+        decreaseBtn.addEventListener('click', function() {
+            let currentQty = parseInt(qtyInput.value);
+            if (currentQty > 1) {
+                qtyInput.value = currentQty - 1;
+                updateCost();
+            }
         });
-        console.log("{{item.id}}")
-    </script>
-    
+        
+        // Increase quantity
+        increaseBtn.addEventListener('click', function() {
+            let currentQty = parseInt(qtyInput.value);
+            qtyInput.value = currentQty + 1;
+            updateCost();
+        });
+        
+        // Handle direct input changes
+        qtyInput.addEventListener('change', function() {
+            // Ensure minimum value is 1
+            if (parseInt(this.value) < 1) {
+                this.value = 1;
+            }
+            updateCost();
+        });
+        
+        // Toggle cart popup
+        cartBadge.addEventListener('click', function() {
+            cartPopup.classList.toggle('visible');
+        });
+        
+        // Close cart popup
+        closeCartBtn.addEventListener('click', function() {
+            cartPopup.classList.remove('visible');
+        });
+        
+        // Function to update cart badge
+        function updateCartBadge() {
+            const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+            cartBadge.textContent = totalItems;
+            
+            if (totalItems > 0) {
+                cartBadge.style.display = 'flex';
+            } else {
+                cartBadge.style.display = 'none';
+            }
+        }
+        
+        // Function to update cart total
+        function updateCartTotal() {
+            cartTotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+            cartTotalPrice.textContent = 'RS' + cartTotal.toFixed(2);
+        }
+        
+        // Function to render cart items
+        function renderCart() {
+            // Show/hide empty cart message
+            if (cart.length === 0) {
+                cartEmptyMsg.style.display = 'block';
+            } else {
+                cartEmptyMsg.style.display = 'none';
+            }
+            
+            // Clear current items (except empty message)
+            const currentItems = cartItems.querySelectorAll('.cart-item');
+            currentItems.forEach(item => item.remove());
+            
+            // Add each cart item
+            cart.forEach((item, index) => {
+                const cartItem = document.createElement('div');
+                cartItem.className = 'cart-item';
+                cartItem.dataset.id = item.id;
+                
+                cartItem.innerHTML = `
+                    <div class="cart-item-container">
+                        <img src="${item.imgUrl ? '/static/' + item.imgUrl : '/static/img/placeholder.png'}" alt="${item.title}" class="cart-item-image">
+                        <div class="cart-product-info">
+                            <div class="cart-item-title">${item.title}</div>
+                            <div class="cart-item-price">RS${item.price.toFixed(2)}</div>
+                            <div class="cart-item-quantity">
+                                <button class="cart-qty-btn cart-decrease" data-index="${index}">-</button>
+                                <span class="cart-qty-value">${item.quantity}</span>
+                                <button class="cart-qty-btn cart-increase" data-index="${index}">+</button>
+                            </div>
+                        </div>
+                        <button class="remove-item" data-index="${index}">×</button>
+                    </div>
+                `;
+                
+                cartItems.insertBefore(cartItem, cartEmptyMsg);
+            });
+            
+            // Add event listeners to new cart item buttons
+            attachCartItemEvents();
+            
+            // Update cart total
+            updateCartTotal();
+            
+            // Save cart to localStorage
+            saveCart();
+        }
+        
+        // Function to attach event listeners to cart item buttons
+        function attachCartItemEvents() {
+            // Decrease quantity buttons
+            const decreaseBtns = cartItems.querySelectorAll('.cart-decrease');
+            decreaseBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const index = parseInt(this.dataset.index);
+                    if (cart[index].quantity > 1) {
+                        cart[index].quantity--;
+                    } else {
+                        cart.splice(index, 1);
+                    }
+                    renderCart();
+                    updateCartBadge();
+                });
+            });
+            
+            // Increase quantity buttons
+            const increaseBtns = cartItems.querySelectorAll('.cart-increase');
+            increaseBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const index = parseInt(this.dataset.index);
+                    cart[index].quantity++;
+                    renderCart();
+                    updateCartBadge();
+                });
+            });
+            
+            // Remove item buttons
+            const removeBtns = cartItems.querySelectorAll('.remove-item');
+            removeBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const index = parseInt(this.dataset.index);
+                    cart.splice(index, 1);
+                    renderCart();
+                    updateCartBadge();
+                });
+            });
+        }
+        
+        // Add to cart button event
+        addToCartBtn.addEventListener('click', function() {
+            // Get current product data
+            const quantity = parseInt(qtyInput.value);
+            
+            // Always add as a new item with the specific product ID
+            cart.push({
+                id: product.id,
+                title: product.title,
+                price: product.price,
+                quantity: quantity,
+                imgUrl: product.imgUrl
+            });
+            
+            // Update cart UI
+            renderCart();
+            updateCartBadge();
+            
+            // Show cart popup
+            cartPopup.classList.add('visible');
+            
+            // Reset quantity input to 1
+            qtyInput.value = 1;
+            updateCost();
+            
+            // Save cart to localStorage
+            saveCart();
+        });
+        
+        // Checkout button event
+        checkoutBtn.addEventListener('click', function() {
+            paymentModal.classList.add('visible');
+        });
+        
+        // Close payment modal
+        paymentCloseBtn.addEventListener('click', function() {
+            paymentModal.classList.remove('visible');
+        });
+        
+        // Close payment modal when clicking outside the content
+        paymentModal.addEventListener('click', function(e) {
+            if (e.target === paymentModal) {
+                paymentModal.classList.remove('visible');
+            }
+        });
+        
+        // Initialize: Load cart from localStorage, then update UI
+        loadCart();
+        updateCartBadge();
+        renderCart();
+    });
+</script>
 {% endblock %}

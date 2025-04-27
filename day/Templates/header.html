@@ -100,13 +100,13 @@
     }
 </style>
 <header>
-    <div class="logo" id="na" onclick="na()">M</div>
+    <div class="logo" id="na" onclick="na()" style="color='white'">M</div>
     <nav>
         <ul>
             <li><a href="/"  class="fa">HOME</a></li>
             <li><a href="/details/"  class="fa">Product</a></li>    
             <li><a href="{% url 'home' %}#abt" class="fa">About Us</a></li>
-            <li><a href="#"  class="fa">Map</a></li>
+            <li><a href="/map"  class="fa">Map</a></li>
             {% if user.is_authenticated %}
             <li ><a href="{% url 'logout' %} " class="fa">Log Out</a></li>
             <li ><a href="{% url 'Dhasboard'} " class="fa">Dhasboard</a></li>

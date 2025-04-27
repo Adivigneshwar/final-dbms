@@ -1,0 +1,245 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+    /* Map Section */
+    .map-section {
+        margin-top: 50px;
+        margin-bottom: 50px;
+        text-align: center;
+    }
+
+    .map-section h2 {
+        font-size: 32px;
+        font-weight: 700;
+        color: #1e3a8a;
+        margin-bottom: 10px;
+        animation: fadeInDown 1s ease forwards;
+    }
+
+    .map-section p {
+        font-size: 16px;
+        color: #4b5563;
+        margin-bottom: 30px;
+        animation: fadeIn 1.5s ease forwards;
+    }
+
+    .map-container {
+        position: relative;
+        width: 90%;
+        max-width: 1000px;
+        height: 450px;
+        margin: 0 auto;
+        border-radius: 20px;
+        overflow: hidden;
+        background: rgba(255, 255, 255, 0.2);
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .map-container:hover {
+        transform: scale(1.02);
+        box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.45);
+    }
+
+    #map {
+        width: 100%;
+        height: 100%;
+        border-radius: 20px;
+        cursor: pointer;
+    }
+
+    .map-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 20px;
+        font-weight: 600;
+        pointer-events: none;
+        opacity: 1;
+        transition: opacity 0.4s ease;
+        border-radius: 20px;
+    }
+
+    .map-container.active .map-overlay {
+        opacity: 0;
+    }
+
+    .location-info {
+        margin-top: 30px;
+        padding: 20px;
+        background: #ffffff;
+        border-radius: 20px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        display: none;
+        text-align: center;
+        animation: fadeIn 1s ease forwards;
+    }
+
+    .location-info.active {
+        display: block;
+    }
+
+    .location-info h3 {
+        font-size: 24px;
+        color: #1e3a8a;
+        margin-bottom: 15px;
+    }
+
+    .info-item {
+        font-size: 18px;
+        margin-bottom: 10px;
+        color: #374151;
+    }
+
+    .info-item strong {
+        color: #007BFF;
+    }
+
+    #refreshBtn {
+        margin-top: 15px;
+        padding: 10px 20px;
+        background-color: #007BFF;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+
+    #refreshBtn:hover {
+        background-color: #0056b3;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+        0% { opacity: 0; transform: translateY(20px); }
+        100% { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInDown {
+        0% { opacity: 0; transform: translateY(-30px); }
+        100% { opacity: 1; transform: translateY(0); }
+    }
+</style>
+<h3>Your Location for delivery:</h3><br> <br>
+<!-- Location Info Section -->
+<div class="location-info" id="locationInfo">
+    <h3>📍 Your Current Location</h3>
+    <div class="info-item">
+        <strong>Latitude:</strong> <span id="latitudeDisplay">---</span>
+    </div>
+    <div class="info-item">
+        <strong>Longitude:</strong> <span id="longitudeDisplay">---</span>
+    </div>
+    <div class="info-item">
+        <strong>Address:</strong> <span id="addressDisplay">Fetching address...</span>
+    </div>
+    <button id="refreshBtn">🔄 Refresh Location</button>
+</div>
+
+<!-- Map Section -->
+<div class="map-container">
+    <div id="map"></div>
+    <div class="map-overlay">Click to Find Your Location</div>
+</div>
+
+<!-- Load MapLibre GL -->
+<link href="https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.css" rel="stylesheet" />
+<script src="https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.js"></script>
+
+<script>
+    let map, marker;
+    let mapContainer = document.querySelector('.map-container');
+    let latitudeDisplay = document.getElementById('latitudeDisplay');
+    let longitudeDisplay = document.getElementById('longitudeDisplay');
+    let addressDisplay = document.getElementById('addressDisplay');
+    let locationInfo = document.getElementById('locationInfo');
+
+    async function initMap() {
+        const middleOfUSA = { lng: -98.5795, lat: 39.8283 };
+
+        map = new maplibregl.Map({
+            container: 'map',
+            style: "https://tiles.openfreemap.org/styles/liberty",
+            center: [middleOfUSA.lng, middleOfUSA.lat],
+            zoom: 4
+        });
+
+        marker = new maplibregl.Marker()
+            .setLngLat([middleOfUSA.lng, middleOfUSA.lat])
+            .addTo(map);
+
+        mapContainer.addEventListener('click', function () {
+            getCurrentLocation();
+        });
+    }
+
+    async function getCurrentLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                async function (position) {
+                    const userLocation = {
+                        lng: position.coords.longitude,
+                        lat: position.coords.latitude
+                    };
+
+                    map.flyTo({
+                        center: [userLocation.lng, userLocation.lat],
+                        zoom: 13
+                    });
+
+                    marker.setLngLat([userLocation.lng, userLocation.lat]);
+
+                    latitudeDisplay.textContent = userLocation.lat.toFixed(6);
+                    longitudeDisplay.textContent = userLocation.lng.toFixed(6);
+
+                    addressDisplay.textContent = "Address lookup not available (MapLibre only shows maps)";
+
+                    mapContainer.classList.add('active');
+                    locationInfo.classList.add('active');
+                },
+                function (error) {
+                    let errorMessage = 'Unable to retrieve your location. ';
+
+                    switch (error.code) {
+                        case error.PERMISSION_DENIED:
+                            errorMessage += 'Location permission denied.';
+                            break;
+                        case error.POSITION_UNAVAILABLE:
+                            errorMessage += 'Location unavailable.';
+                            break;
+                        case error.TIMEOUT:
+                            errorMessage += 'Request timed out.';
+                            break;
+                        default:
+                            errorMessage += 'An unknown error occurred.';
+                            break;
+                    }
+
+                    alert(errorMessage);
+                }
+            );
+        } else {
+            alert("Geolocation is not supported by this browser.");
+        }
+    }
+
+    document.getElementById('refreshBtn').addEventListener('click', function () {
+        window.location.reload();
+    });
+
+    window.onload = initMap;
+</script><br> <br> <br><br><br><br><br><br><br>
+{% endblock %}
